@@ -1,0 +1,93 @@
+#!/bin/bash
+# Made by Sinfallas <sinfallas@yahoo.com>
+# Licence: GPL-2
+if [[ $USER != root ]]; then
+	echo -e "\e[00;31mERROR: DEBES SER ROOT\e[00m"
+	exit 1
+fi
+trap "rm -f /run/auditar.pid; exit" INT TERM EXIT
+echo $BASHPID > /run/auditar.pid
+nombre="revision.txt"
+name=$(hostname)
+ip="192.168.200.202"
+sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+mkdir -p /tmp/$name
+mkdir -p /var/log
+chmod 666 /tmp/$name
+
+echo -e "## KERNEL ##""\n" > /tmp/$name/$nombre
+uname -r >> /tmp/$name/$nombre
+
+echo -e "\n""## os-release ##""\n" >> /tmp/$name/$nombre
+cat /etc/os-release >> /tmp/$name/$nombre
+
+echo -e "\n""## CPU ##""\n" >> /tmp/$name/$nombre
+lscpu >> /tmp/$name/$nombre
+
+echo -e "\n""## PCI ##""\n" >> /tmp/$name/$nombre
+lspci >> /tmp/$name/$nombre
+
+echo -e "\n""## USB ##""\n" >> /tmp/$name/$nombre
+lsusb >> /tmp/$name/$nombre
+
+echo -e "\n""## MEMORIA ##""\n" >> /tmp/$name/$nombre
+free >> /tmp/$name/$nombre
+
+echo -e "## ESPACIO DEL HOME ##""\n" >> /tmp/$name/$nombre
+du -bsh /home >> /tmp/$name/$nombre
+du -bsh $(pwd) >> /tmp/$name/$nombre
+
+echo -e "\n""## conexion ##""\n" >> /tmp/$name/$nombre
+ping -c 10 192.168.200.202 >> /tmp/$name/$nombre
+
+echo -e "\n""## PROXY ##""\n" >> /tmp/$name/$nombre
+echo $HTTP_PROXY >> /tmp/$name/$nombre
+echo $HTTPS_PROXY >> /tmp/$name/$nombre
+echo $FTP_PROXY >> /tmp/$name/$nombre
+
+tar -xzvf lynis-2.1.1.tar.gz
+chown -R root:root lynis
+cd lynis
+./lynis -c -Q
+cd ..
+cp -f /var/log/lynis.log /tmp/$name/lynis.log
+cp -f /var/log/lynis-report.dat /tmp/$name/lynis-report.dat
+
+cp -f /etc/fstab /tmp/$name/fstab
+iptables-save > /tmp/$name/$name.iptables
+ifconfig -a > /tmp/$name/$name.interfaces
+dpkg --get-selections | grep install | awk '{print $1}' > /tmp/$name/$name.list
+
+function red () {
+	#ssh-keygen -b 1024 -t rsa -f $(pwd)/.ssh/id_rsa -N ''
+	#cat $(pwd)/.ssh/id_rsa.pub | ssh user@$ip 'cat - >> ~/.ssh/authorized_keys'
+	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no user@192.168.200.202:/home/user/test.bin /tmp/' | tee /tmp/$name/down.txt
+	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/test.bin user@192.168.200.202:/home/user/temp/$name.bin' | tee /tmp/$name/up.txt
+	tar -czvf /tmp/$name.tar.gz /tmp/$name/ 
+	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/$name.tar.gz user@192.168.200.202:/home/user/audit/
+}
+
+if [[ -f /usr/bin/ssh ]]; then
+	red
+else
+	export HTTP_PROXY="http://administrador:ControlRLC1304@192.168.200.5:8080"
+	export HTTPS_PROXY="http://administrador:ControlRLC1304@192.168.200.5:8080"
+	export FTP_PROXY="http://administrador:ControlRLC1304@192.168.200.5:8080"
+	apt-get update -q
+	apt-get -y --force-yes ssh
+	red
+fi
+
+rm -f $(pwd)/lynis-2.1.1.tar.gz
+rm -rf $(pwd)/lynis/*
+rmdir $(pwd)/lynis
+rm -f /tmp/test.bin
+rm -rf /tmp/$name/*
+rm -f /tmp/$name.tar.gz
+
+clear
+rm -f auditar
+rm -f /run/auditar.pid
+trap - INT TERM EXIT
+reboot
+exit 0
