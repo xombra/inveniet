@@ -1,4 +1,16 @@
-commit 7919a2d42512965ad2758f764c25a864be55e013 (HEAD, origin/master, origin/HEAD, master)
+commit 607ca47b774da7fc9060077bb3718b0986763e61 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Thu Sep 17 12:23:57 2015 -0430
+
+    * se agrega la parte del servidor
+
+commit a2d39bc29d7cf74305e56f8b6daacbe2cd7a77fd
+Author: jose perez <sinfallas@gmail.com>
+Date:   Wed Sep 16 20:22:42 2015 -0430
+
+    * changelog
+
+commit 7919a2d42512965ad2758f764c25a864be55e013
 Author: jose perez <sinfallas@gmail.com>
 Date:   Wed Sep 16 20:22:23 2015 -0430
 
