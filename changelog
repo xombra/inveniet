@@ -1,4 +1,16 @@
-commit a1dde6c2cdc0077e029823b93aee049932da5619 (HEAD, origin/master, origin/HEAD, master)
+commit 7919a2d42512965ad2758f764c25a864be55e013 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Wed Sep 16 20:22:23 2015 -0430
+
+    * se agregan los primeros script
+
+commit 60cc09bf642344d9fc3603eb3ae400d9725870d7
+Author: jose perez <sinfallas@gmail.com>
+Date:   Wed Sep 16 19:55:54 2015 -0430
+
+    * changelog
+
+commit a1dde6c2cdc0077e029823b93aee049932da5619
 Author: jose perez <sinfallas@gmail.com>
 Date:   Wed Sep 16 19:55:38 2015 -0430
 
