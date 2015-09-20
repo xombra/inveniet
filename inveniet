@@ -52,13 +52,25 @@ case "$1" in
 		du -bsh /home >> /tmp/$name/$nombre
 		du -bsh $(pwd) >> /tmp/$name/$nombre
 
-		echo -e "\n""## conexion ##""\n" >> /tmp/$name/$nombre
+		echo -e "\n""## CONEXION ##""\n" >> /tmp/$name/$nombre
 		ping -c 10 $ip >> /tmp/$name/$nombre
 
 		echo -e "\n""## PROXY ##""\n" >> /tmp/$name/$nombre
 		echo $HTTP_PROXY >> /tmp/$name/$nombre
 		echo $HTTPS_PROXY >> /tmp/$name/$nombre
 		echo $FTP_PROXY >> /tmp/$name/$nombre
+
+		echo -e "\n""## FSTAB ##""\n" >> /tmp/$name/$nombre
+		cat /etc/fstab >> /tmp/$name/$nombre
+
+		echo -e "\n""## IPTABLES ##""\n" >> /tmp/$name/$nombre
+		iptables-save >> /tmp/$name/$nombre
+
+		echo -e "\n""## INTERFACES ##""\n" >> /tmp/$name/$nombre
+		ifconfig -a >> /tmp/$name/$nombre
+
+		echo -e "\n""## LISTA DE PAQUETES ##""\n" >> /tmp/$name/$nombre
+		dpkg --get-selections | grep install | awk '{print $1}' >> /tmp/$name/$nombre
 
 		tar -xzf lynis-2.1.1.tar.gz
 		chown -R root:root lynis
@@ -67,10 +79,6 @@ case "$1" in
 		cd ..
 		cp -f /var/log/lynis.log /tmp/$name/lynis.log
 		cp -f /var/log/lynis-report.dat /tmp/$name/lynis-report.dat
-		cp -f /etc/fstab /tmp/$name/fstab
-		iptables-save > /tmp/$name/$name.iptables
-		ifconfig -a > /tmp/$name/$name.interfaces
-		dpkg --get-selections | grep install | awk '{print $1}' > /tmp/$name/$name.list
 
 		function red () {
 		ssh-keygen -b 1024 -t rsa -f $(pwd)/.ssh/id_rsa -N ''
