@@ -1,4 +1,16 @@
-commit 7240200257ea47d153c069e17a6828b03d053af3 (HEAD, origin/master, origin/HEAD, master)
+commit 0e1eee2149cc648a59291d03c900fedfaab8d0d5 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Sep 20 16:46:47 2015 -0430
+
+    * se fucionan algunos archivos de resultado en uno solo
+
+commit f0ec9f198c5dd4e0b320b268e725603942f515f4
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Sep 20 16:36:35 2015 -0430
+
+    * changelog
+
+commit 7240200257ea47d153c069e17a6828b03d053af3
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Sep 20 16:36:16 2015 -0430
 
