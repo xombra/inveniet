@@ -1,4 +1,16 @@
-commit 607ca47b774da7fc9060077bb3718b0986763e61 (HEAD, origin/master, origin/HEAD, master)
+commit d54d1b0a110887ee2a26d3a3edd291fb930f6459 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sat Sep 19 23:07:07 2015 -0430
+
+    * se actualiza la lista de pendientes
+
+commit c8bfcaa1d54552ad3f4dc5269d814d2c5b27b447
+Author: jose perez <sinfallas@gmail.com>
+Date:   Thu Sep 17 12:24:21 2015 -0430
+
+    * changelog
+
+commit 607ca47b774da7fc9060077bb3718b0986763e61
 Author: jose perez <sinfallas@gmail.com>
 Date:   Thu Sep 17 12:23:57 2015 -0430
 
