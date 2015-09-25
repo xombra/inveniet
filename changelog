@@ -1,4 +1,17 @@
-commit 0e1eee2149cc648a59291d03c900fedfaab8d0d5 (HEAD, origin/master, origin/HEAD, master)
+commit b5b494d8540f59268d56eb5d2989c523269f3c41 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Thu Sep 24 21:23:58 2015 -0430
+
+    * se agrega una variable para el pid
+    * se actualiza el TODO
+
+commit 638145bd30e5942330fc31db25cd945a0210b4d2
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Sep 20 16:47:24 2015 -0430
+
+    * changelog
+
+commit 0e1eee2149cc648a59291d03c900fedfaab8d0d5
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Sep 20 16:46:47 2015 -0430
 
