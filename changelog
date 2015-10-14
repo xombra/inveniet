@@ -1,4 +1,16 @@
-commit b5b494d8540f59268d56eb5d2989c523269f3c41 (HEAD, origin/master, origin/HEAD, master)
+commit f0b103d486d06e902d2bde5b9c724c1e5e6b4a26 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Tue Oct 13 22:21:11 2015 -0430
+
+    * travis
+
+commit 03e4781c6e89fc84db502d5db57eec5f6691b05a
+Author: jose perez <sinfallas@gmail.com>
+Date:   Thu Sep 24 21:25:16 2015 -0430
+
+    * changelog
+
+commit b5b494d8540f59268d56eb5d2989c523269f3c41
 Author: jose perez <sinfallas@gmail.com>
 Date:   Thu Sep 24 21:23:58 2015 -0430
 
@@ -41,7 +53,7 @@ Date:   Sat Sep 19 23:07:07 2015 -0430
 
     * se actualiza la lista de pendientes
 
-commit c8bfcaa1d54552ad3f4dc5269d814d2c5b27b447
+commit c8bfcaa1d54552ad3f4dc5269d814d2c5b27b447 (tag: v0.1)
 Author: jose perez <sinfallas@gmail.com>
 Date:   Thu Sep 17 12:24:21 2015 -0430
 
