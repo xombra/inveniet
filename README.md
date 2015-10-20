@@ -2,4 +2,4 @@
 
 [![Build Status](https://travis-ci.org/sinfallas/inveniet.svg)](https://travis-ci.org/sinfallas/inveniet)
 
-Script para obtener informacion de multiples equipos y transferirla a un equipo remoto
+Script to get information from multiple computers and transfer it to a remote computer
