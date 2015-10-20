@@ -1,4 +1,22 @@
-commit f0b103d486d06e902d2bde5b9c724c1e5e6b4a26 (HEAD, origin/master, origin/HEAD, master)
+commit 24c891e9eae2994f713a75bdf6d7270e3c0662c1 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Mon Oct 19 20:07:46 2015 -0430
+
+    * traduccion
+
+commit 99c3cb2b2e808e3a4f0bd96b975040824f2b58ed
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Oct 18 23:56:31 2015 -0430
+
+    optimizaciones
+
+commit 057836ce62f12028d44423cd1eb2ffe06b712a77
+Author: jose perez <sinfallas@gmail.com>
+Date:   Tue Oct 13 22:21:27 2015 -0430
+
+    * changelog
+
+commit f0b103d486d06e902d2bde5b9c724c1e5e6b4a26
 Author: jose perez <sinfallas@gmail.com>
 Date:   Tue Oct 13 22:21:11 2015 -0430
 
