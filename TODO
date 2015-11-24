@@ -4,3 +4,4 @@
 * agregar funcion para instalar ssh en distribuciones no derivadas de debian
 * agregar firma md5
 * colocar opcion para ejecutar local
+* colocar el otro programa de auditoria
