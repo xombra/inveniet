@@ -1,10 +1,28 @@
-commit 73576586e4df864c82b19b3ea7a44e39b958946a (HEAD, origin/master, origin/HEAD, master)
+commit 43f7c5cea4170c5ad7867a58cefc2f8a4960ed9b (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 18:01:02 2015 -0430
+
+    boinc-preinstaller
+
+commit 0ad8d356a1f28e5e535f6d76c9d0bac360bf4718
+Author: jose perez <sinfallas@gmail.com>
+Date:   Mon Nov 23 21:13:44 2015 -0430
+
+    * se actualiza el archivo todo
+
+commit af40fb5164d7d440593359c95d91a3b08129b020
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Nov 1 14:46:34 2015 -0430
+
+    * changelog
+
+commit 73576586e4df864c82b19b3ea7a44e39b958946a
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Nov 1 14:46:24 2015 -0430
 
     * zenodo
 
-commit 76562d31d887fd943392c146021c8851c366fc77
+commit 76562d31d887fd943392c146021c8851c366fc77 (tag: v0.1.1)
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sat Oct 31 18:38:58 2015 -0430
 
