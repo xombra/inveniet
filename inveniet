@@ -6,8 +6,8 @@ if [[ $USER != root ]]; then
 	echo -e "\e[00;31mERROR: DEBES SER ROOT\e[00m"
 	exit 1
 fi
-trap "rm -f /run/inveniet.pid; exit" INT TERM EXIT
-echo "$BASHPID" > /run/inveniet.pid
+trap "rm -f /run/$(basename $0).pid; exit" INT TERM EXIT
+echo "$BASHPID" > /run/$(basename $0).pid
 nombre="revision.txt"
 name=$(hostname)
 ip="192.168.1.2"
@@ -118,11 +118,11 @@ case "$1" in
 		;;
 
 	*)
-		echo "uso: $0 {cliente|servidor}"
+		echo "uso: $(basename $0) {cliente|servidor}"
 		;;
 
 esac
 
-rm -f /run/inveniet.pid
+rm -f /run/$(basename $0).pid
 trap - INT TERM EXIT
 exit 0
