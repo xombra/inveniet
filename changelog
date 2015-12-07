@@ -1,4 +1,16 @@
-commit fd9ec06afaac7d7d0dadac861b9ae4fd620efa18 (HEAD, origin/master, origin/HEAD, master)
+commit f0d5a3ffd8bb0c6d92e9ca569211a61076615d4c (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:45:00 2015 -0430
+
+    * se actualiza TODO
+
+commit 59835c4f3a4b7ec78042a0b2e9420dc4e2f5f133
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:35:36 2015 -0430
+
+    * changelog
+
+commit fd9ec06afaac7d7d0dadac861b9ae4fd620efa18
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Dec 6 21:35:22 2015 -0430
 
