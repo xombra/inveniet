@@ -1,4 +1,17 @@
-commit 0eab4929646c229886104e396453f397e7ec2f6d (HEAD, origin/master, origin/HEAD, master)
+commit 827f7ae6928dbddc61aaf4dad5d775b7e7131067 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:11:08 2015 -0430
+
+    * se agrega la posibilidad de ejecutarlo localmente
+    * se mejora linenum
+
+commit 33f3d2b566ff29d96751f5d1776b795f7ecfb392
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:03:06 2015 -0430
+
+    * changelog
+
+commit 0eab4929646c229886104e396453f397e7ec2f6d
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Dec 6 21:02:23 2015 -0430
 
