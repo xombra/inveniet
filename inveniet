@@ -17,9 +17,9 @@ miproxy="http://user:pass@proxy:8080"
 
 function installssh () {
 	if ! [[ -f /usr/bin/ssh ]]; then
-		export HTTP_PROXY=$miproxy
-		export HTTPS_PROXY=$miproxy
-		export FTP_PROXY=$miproxy
+		export HTTP_PROXY="$miproxy"
+		export HTTPS_PROXY="$miproxy"
+		export FTP_PROXY="$miproxy"
 		apt-get update -q
 		apt-get -y --force-yes ssh
 	fi
