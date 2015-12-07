@@ -1,4 +1,17 @@
-commit 43f7c5cea4170c5ad7867a58cefc2f8a4960ed9b (HEAD, origin/master, origin/HEAD, master)
+commit 0eab4929646c229886104e396453f397e7ec2f6d (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:02:23 2015 -0430
+
+    * se agrega linenum
+    * se separa el codigo en funciones
+
+commit d5a83f6f7e850e59bfb0b77f16501711b8b9f4a3
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 18:04:35 2015 -0430
+
+    * changelog
+
+commit 43f7c5cea4170c5ad7867a58cefc2f8a4960ed9b
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Dec 6 18:01:02 2015 -0430
 
