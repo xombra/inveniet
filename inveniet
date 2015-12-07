@@ -87,14 +87,17 @@ function lynis_1 () {
 	cd /tmp/"$name"/lynis
 	./lynis -c -Q
 	cd ..
-	cp -f /var/log/lynis.log /tmp/"$name"/lynis.log
-	cp -f /var/log/lynis-report.dat /tmp/"$name"/lynis-report.dat
+	mv -f /var/log/lynis.log /tmp/"$name"/lynis.log
+	mv -f /var/log/lynis-report.dat /tmp/"$name"/lynis-report.dat
 }
 
-function limpiar () {
+function finalizar () {
 	rm -f /tmp/"$name"/lynis.tar.gz
 	rm -rf /tmp/"$name"/lynis/*
 	rmdir /tmp/"$name"/lynis
+	rm -f /tmp/"$name"/master.zip
+
+
 	rm -f /tmp/test.bin
 	rm -rf /tmp/"$name"/*
 	rm -f /tmp/"$name".tar.gz
@@ -108,7 +111,7 @@ case "$1" in
 		linenum_1
 		installssh
 		red
-		limpiar
+		finalizar
 		;;	
 
 	servidor)
@@ -127,8 +130,14 @@ case "$1" in
 		systemctl start ssh
 		;;
 
+	local)
+		revision
+		lynis_1
+		linenum_1
+		;;
+
 	*)
-		echo "uso: $(basename $0) {cliente|servidor}"
+		echo "uso: $(basename $0) {cliente|servidor|local}"
 		;;
 
 esac
