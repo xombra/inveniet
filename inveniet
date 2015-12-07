@@ -8,107 +8,117 @@ if [[ $USER != root ]]; then
 fi
 trap "rm -f /run/$(basename $0).pid; exit" INT TERM EXIT
 echo "$BASHPID" > /run/$(basename $0).pid
+quien=$(who | cut -d' ' -f1 | sort | uniq)
 nombre="revision.txt"
 name=$(hostname)
 ip="192.168.1.2"
 sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+miproxy="http://user:pass@proxy:8080"
 
 function installssh () {
-	if [[ -f /usr/bin/ssh ]]; then
-		echo 1 > /dev/null
-	else
-		export HTTP_PROXY="http://user:pass@proxy:8080"
-		export HTTPS_PROXY="http://user:pass@proxy:8080"
-		export FTP_PROXY="http://user:pass@proxy:8080"
+	if ! [[ -f /usr/bin/ssh ]]; then
+		export HTTP_PROXY=$miproxy
+		export HTTPS_PROXY=$miproxy
+		export FTP_PROXY=$miproxy
 		apt-get update -q
 		apt-get -y --force-yes ssh
 	fi
 }
 
+function red () {
+	ssh-keygen -b 1024 -t rsa -f /home/$quien/.ssh/id_rsa -N ''
+	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$ip" 'cat - >> ~/.ssh/authorized_keys'
+	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no user@192.168.1.2:/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
+	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/test.bin user@192.168.1.2:/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
+	tar -czf /tmp/"$name".tar.gz /tmp/"$name"/ 
+	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz user@"$ip":/home/user/audit/
+}
+
+function revision () {
+	mkdir -p /tmp/"$name"
+	mkdir -p /var/log
+	chmod 666 /tmp/"$name"
+	echo -e "## KERNEL ##""\n" > /tmp/"$name"/"$nombre"
+	uname -r >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## os-release ##""\n" >> /tmp/"$name"/"$nombre"
+	cat /etc/os-release >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## CPU ##""\n" >> /tmp/"$name"/"$nombre"
+	lscpu >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## PCI ##""\n" >> /tmp/"$name"/"$nombre"
+	lspci >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## USB ##""\n" >> /tmp/"$name"/"$nombre"
+	lsusb >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## MEMORIA ##""\n" >> /tmp/"$name"/"$nombre"
+	free >> /tmp/"$name"/"$nombre"
+	echo -e "## ESPACIO DEL HOME ##""\n" >> /tmp/"$name"/"$nombre"
+	du -bsh /home >> /tmp/"$name"/"$nombre"
+	du -bsh /home/$quien >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## CONEXION ##""\n" >> /tmp/"$name"/"$nombre"
+	ping -c 10 $ip >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## PROXY ##""\n" >> /tmp/"$name"/"$nombre"
+	echo $HTTP_PROXY >> /tmp/"$name"/"$nombre"
+	echo $HTTPS_PROXY >> /tmp/"$name"/"$nombre"
+	echo $FTP_PROXY >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## FSTAB ##""\n" >> /tmp/"$name"/"$nombre"
+	cat /etc/fstab >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## IPTABLES ##""\n" >> /tmp/"$name"/"$nombre"
+	iptables-save >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## INTERFACES ##""\n" >> /tmp/"$name"/"$nombre"
+	ifconfig -a >> /tmp/"$name"/"$nombre"
+	echo -e "\n""## LISTA DE PAQUETES ##""\n" >> /tmp/"$name"/"$nombre"
+	dpkg --get-selections | grep install | awk '{print $1}' >> /tmp/"$name"/"$nombre"
+}
+
+function linenum_1 () {
+	mkdir -p /tmp/"$name"/misc
+	wget -q -O /tmp/"$name"/master.zip - https://github.com/rebootuser/LinEnum/archive/master.zip
+	cd /tmp/"$name"
+	unzip master.zip
+	cd /tmp/"$name"/LinEnum-master
+	./LinEnum.sh -r reportelinenum -e /tmp/"$name"/misc -t
+
+}
+
+function lynis_1 () {
+	wget -q -O /tmp/"$name"/lynis.tar.gz - https://cisofy.com/files/lynis-2.1.1.tar.gz
+	cd /tmp/"$name"
+	tar -xzf lynis.tar.gz
+	chown -R root:root lynis
+	cd /tmp/"$name"/lynis
+	./lynis -c -Q
+	cd ..
+	cp -f /var/log/lynis.log /tmp/"$name"/lynis.log
+	cp -f /var/log/lynis-report.dat /tmp/"$name"/lynis-report.dat
+}
+
+function limpiar () {
+	rm -f /tmp/"$name"/lynis.tar.gz
+	rm -rf /tmp/"$name"/lynis/*
+	rmdir /tmp/"$name"/lynis
+	rm -f /tmp/test.bin
+	rm -rf /tmp/"$name"/*
+	rm -f /tmp/"$name".tar.gz
+	clear
+}
+
 case "$1" in
 	cliente)
-		mkdir -p /tmp/"$name"
-		mkdir -p /var/log
-		chmod 666 /tmp/"$name"
-
-		echo -e "## KERNEL ##""\n" > /tmp/"$name"/"$nombre"
-		uname -r >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## os-release ##""\n" >> /tmp/"$name"/"$nombre"
-		cat /etc/os-release >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## CPU ##""\n" >> /tmp/"$name"/"$nombre"
-		lscpu >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## PCI ##""\n" >> /tmp/"$name"/"$nombre"
-		lspci >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## USB ##""\n" >> /tmp/"$name"/"$nombre"
-		lsusb >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## MEMORIA ##""\n" >> /tmp/"$name"/"$nombre"
-		free >> /tmp/"$name"/"$nombre"
-
-		echo -e "## ESPACIO DEL HOME ##""\n" >> /tmp/"$name"/"$nombre"
-		du -bsh /home >> /tmp/"$name"/"$nombre"
-		du -bsh $(pwd) >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## CONEXION ##""\n" >> /tmp/"$name"/"$nombre"
-		ping -c 10 $ip >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## PROXY ##""\n" >> /tmp/"$name"/"$nombre"
-		echo $HTTP_PROXY >> /tmp/"$name"/"$nombre"
-		echo $HTTPS_PROXY >> /tmp/"$name"/"$nombre"
-		echo $FTP_PROXY >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## FSTAB ##""\n" >> /tmp/"$name"/"$nombre"
-		cat /etc/fstab >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## IPTABLES ##""\n" >> /tmp/"$name"/"$nombre"
-		iptables-save >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## INTERFACES ##""\n" >> /tmp/"$name"/"$nombre"
-		ifconfig -a >> /tmp/"$name"/"$nombre"
-
-		echo -e "\n""## LISTA DE PAQUETES ##""\n" >> /tmp/"$name"/"$nombre"
-		dpkg --get-selections | grep install | awk '{print $1}' >> /tmp/"$name"/"$nombre"
-
-		tar -xzf lynis-2.1.1.tar.gz
-		chown -R root:root lynis
-		cd lynis
-		./lynis -c -Q
-		cd ..
-		cp -f /var/log/lynis.log /tmp/"$name"/lynis.log
-		cp -f /var/log/lynis-report.dat /tmp/"$name"/lynis-report.dat
-
-		function red () {
-		ssh-keygen -b 1024 -t rsa -f $(pwd)/.ssh/id_rsa -N ''
-		cat $(pwd)/.ssh/id_rsa.pub | ssh user@"$ip" 'cat - >> ~/.ssh/authorized_keys'
-		script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no user@192.168.1.2:/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
-		script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/test.bin user@192.168.1.2:/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
-		tar -czf /tmp/"$name".tar.gz /tmp/"$name"/ 
-		scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz user@"$ip":/home/user/audit/
-		}
+		revision
+		lynis_1
+		linenum_1
 		installssh
 		red
-		rm -f $(pwd)/lynis-2.1.1.tar.gz
-		rm -rf $(pwd)/lynis/*
-		rmdir $(pwd)/lynis
-		rm -f /tmp/test.bin
-		rm -rf /tmp/"$name"/*
-		rm -f /tmp/"$name".tar.gz
-		clear
-		rm -f inveniet
+		limpiar
 		;;	
 
 	servidor)
-		dd if=/dev/urandom of=$(pwd)/test.bin count=250000
-		mkdir $(pwd)/audit
-		mkdir $(pwd)/temp
-		mkdir $(pwd)/.ssh
+		dd if=/dev/urandom of=/home/$quien/test.bin count=250000
+		mkdir /home/$quien/audit
+		mkdir /home/$quien/temp
+		mkdir /home/$quien/.ssh
 		mkdir /root/.ssh
-		chmod 666 $(pwd)/audit
-		chmod 666 $(pwd)/temp
+		chmod 666 /home/$quien/audit
+		chmod 666 /home/$quien/temp
 		installssh
 		sed -i 's_Port 2222_Port 22_g' /etc/ssh/sshd_config
 		sed -i 's\#AuthorizedKeysFile	%h/.ssh/authorized_keys\AuthorizedKeysFile	%h/.ssh/authorized_keys\g' /etc/ssh/sshd_config
@@ -123,6 +133,7 @@ case "$1" in
 
 esac
 
+rm -f inveniet
 rm -f /run/$(basename $0).pid
 trap - INT TERM EXIT
 exit 0
