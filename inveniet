@@ -11,7 +11,6 @@ echo "$BASHPID" > /run/$(basename $0).pid
 quien=$(who | cut -d' ' -f1 | sort | uniq)
 nombre="revision.txt"
 name=$(hostname)
-ip="192.168.1.2"
 sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 miproxy="http://user:pass@proxy:8080"
 
@@ -27,13 +26,13 @@ function installssh () {
 
 function red () {
 	ssh-keygen -b 1024 -t rsa -f /home/$quien/.ssh/id_rsa -N ''
-	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$ip" 'cat - >> ~/.ssh/authorized_keys'
+	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$1" 'cat - >> ~/.ssh/authorized_keys'
 	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no user@192.168.1.2:/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
 	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/test.bin user@192.168.1.2:/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
 	tar -czf /tmp/"$name".tar.gz /tmp/"$name"/
 	md5sum -b /tmp/"$name".tar.gz > /tmp/"$name".tar.gz.md5sum
-	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz user@"$ip":/home/user/audit/
-	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz.md5sum user@"$ip":/home/user/audit/
+	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz user@"$1":/home/user/audit/
+	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz.md5sum user@"$1":/home/user/audit/
 }
 
 function revision () {
@@ -56,7 +55,7 @@ function revision () {
 	du -bsh /home >> /tmp/"$name"/"$nombre"
 	du -bsh /home/$quien >> /tmp/"$name"/"$nombre"
 	echo -e "\n""## CONEXION ##""\n" >> /tmp/"$name"/"$nombre"
-	ping -c 10 $ip >> /tmp/"$name"/"$nombre"
+	ping -c 10 $1 >> /tmp/"$name"/"$nombre"
 	echo -e "\n""## PROXY ##""\n" >> /tmp/"$name"/"$nombre"
 	echo $HTTP_PROXY >> /tmp/"$name"/"$nombre"
 	echo $HTTPS_PROXY >> /tmp/"$name"/"$nombre"
