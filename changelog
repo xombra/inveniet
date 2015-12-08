@@ -1,4 +1,16 @@
-commit fa770323937da9384d5336932100d26556c9f38a (HEAD, origin/master, origin/HEAD, master)
+commit 728bd8acc08beba53d7d944dda4fb56d07abf038 (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Mon Dec 7 21:12:44 2015 -0430
+
+    * ahora el ip del servidor se pasa como parametro al ejecutar en lugar de una variable dentro del script
+
+commit 3a1cec9ecccb29e7b3f5d6647e305eb5f2830570
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 6 21:51:18 2015 -0430
+
+    * changelog
+
+commit fa770323937da9384d5336932100d26556c9f38a
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sun Dec 6 21:50:53 2015 -0430
 
