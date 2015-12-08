@@ -1,3 +1,2 @@
-* tratar de unificar todo en un solo archivo de reporte
 * agregar funcion para hacer la lista de paquetes en distribuciones no derivadas de debian
 * agregar funcion para instalar ssh en distribuciones no derivadas de debian
