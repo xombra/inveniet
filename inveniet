@@ -29,12 +29,12 @@ function installssh () {
 function red () {
 	ssh-keygen -b 1024 -t rsa -f /home/$quien/.ssh/id_rsa -N ''
 	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$2" 'cat - >> ~/.ssh/authorized_keys'
-	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no user@192.168.1.2:/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
-	script -q /dev/stdout -c 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/test.bin user@192.168.1.2:/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
+	script -q /dev/stdout -c 'scp $sshop user@"$2":/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
+	script -q /dev/stdout -c 'scp $sshop /tmp/test.bin user@"$2":/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
 	tar -czf /tmp/"$name".tar.gz /tmp/"$name"/
 	md5sum -b /tmp/"$name".tar.gz > /tmp/"$name".tar.gz.md5sum
-	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz user@"$2":/home/user/audit/
-	scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /tmp/"$name".tar.gz.md5sum user@"$2":/home/user/audit/
+	scp "$sshop" /tmp/"$name".tar.gz user@"$2":/home/user/audit/
+	scp "$sshop" /tmp/"$name".tar.gz.md5sum user@"$2":/home/user/audit/
 }
 
 function revision () {
