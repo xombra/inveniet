@@ -10,8 +10,8 @@ fi
 trap "rm -f /run/$(basename $0).pid; exit" INT TERM EXIT
 echo "$BASHPID" > /run/$(basename $0).pid
 quien=$(who | cut -d' ' -f1 | sort | uniq)
-nombre="revision.txt"
 name=$(hostname)
+nombre="revision.txt"
 sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 function installssh () {
@@ -23,13 +23,15 @@ function installssh () {
 		fi
 		apt-get update -q
 		apt-get -y --force-yes ssh
+		apt-get clean
 	fi
 }
 
 function revision () {
 	mkdir -p /tmp/"$name"
-	mkdir -p /var/log
 	chmod 666 /tmp/"$name"
+	mkdir -p /tmp/"$name"/misc
+	mkdir -p /var/log
 	echo -e "## KERNEL ##""\n" > /tmp/"$name"/"$nombre"
 	uname -r >> /tmp/"$name"/"$nombre"
 	echo -e "\n""## os-release ##""\n" >> /tmp/"$name"/"$nombre"
@@ -46,7 +48,9 @@ function revision () {
 	du -bsh /home >> /tmp/"$name"/"$nombre"
 	du -bsh /home/$quien >> /tmp/"$name"/"$nombre"
 	echo -e "\n""## CONEXION ##""\n" >> /tmp/"$name"/"$nombre"
-	ping -c 10 $2 >> /tmp/"$name"/"$nombre"
+	if [[ -z $2 ]]; then
+		ping -c 10 $2 >> /tmp/"$name"/"$nombre"
+	fi
 	echo -e "\n""## PROXY ##""\n" >> /tmp/"$name"/"$nombre"
 	echo $HTTP_PROXY >> /tmp/"$name"/"$nombre"
 	echo $HTTPS_PROXY >> /tmp/"$name"/"$nombre"
@@ -74,14 +78,13 @@ function lynis_1 () {
 }
 
 function linenum_1 () {
-	mkdir -p /tmp/"$name"/misc
 	wget -q -O /tmp/"$name"/master.zip - https://github.com/rebootuser/LinEnum/archive/master.zip
 	cd /tmp/"$name"
 	unzip master.zip
 	cd /tmp/"$name"/LinEnum-master
 	./LinEnum.sh -r reportelinenum -e /tmp/"$name"/misc -t
-	cd ..
 	COPIAR REPORTE AL DIRECTORIO
+	cd ..
 }
 
 function buck_security () {
@@ -89,9 +92,9 @@ function buck_security () {
 	cd /tmp/"$name"
 	unzip buck.zip
 	cd /tmp/"$name"/buck-security-master
-	./buck-security
-	cd ..
+	./buck-security --log
 	COPIAR REPORTE AL DIRECTORIO
+	cd ..
 }
 
 function red () {
@@ -106,14 +109,15 @@ function red () {
 }
 
 function finalizar () {
+	rm -f /tmp/test.bin
 	rm -rf /tmp/"$name"/*
 	rmdir /tmp/"$name"/lynis
 	rmdir /tmp/"$name"/misc
 	rmdir /tmp/"$name"/LinEnum-master
 	rmdir /tmp/"$name"/buck-security-master
 	rmdir /tmp/"$name"
-	rm -f /tmp/test.bin
 	clear
+	echo -e "\e[00;1;92mFinalizado...\e[00m"
 }
 
 case "$1" in
@@ -140,7 +144,9 @@ case "$1" in
 		sed -i 's\#AuthorizedKeysFile	%h/.ssh/authorized_keys\AuthorizedKeysFile	%h/.ssh/authorized_keys\g' /etc/ssh/sshd_config
 		sed -i 's\MaxStartups 10:30:60\MaxStartups 30:30:60\g' /etc/ssh/sshd_config
 		systemctl enable ssh
-		systemctl start ssh
+		systemctl restart ssh
+		clear
+		echo -e "\e[00;1;92mFinalizado...\e[00m"
 		;;
 
 	local)
