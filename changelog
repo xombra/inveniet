@@ -1,4 +1,16 @@
-commit 9b01ae6007a8fab78c7e690658191721dedb7c1d (HEAD, origin/master, origin/HEAD, master)
+commit 4eed3452ec1a0aa29b47a39b3e807af472a8133a (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sat Dec 12 23:44:44 2015 -0430
+
+    * se actualiza el archivo TODO
+
+commit 1078f4dc990df09d70657e39cef35f56898b676a
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sat Dec 12 00:16:09 2015 -0430
+
+    * changelog
+
+commit 9b01ae6007a8fab78c7e690658191721dedb7c1d
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sat Dec 12 00:12:49 2015 -0430
 
