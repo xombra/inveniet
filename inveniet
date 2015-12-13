@@ -16,7 +16,7 @@ sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 function installssh () {
 	if ! [[ -f /usr/bin/ssh ]]; then
-		if ! [[ -z $3 ]]; then
+		if [[ -z $3 ]]; then
 			export HTTP_PROXY="$3"
 			export HTTPS_PROXY="$3"
 			export FTP_PROXY="$3"
