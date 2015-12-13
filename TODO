@@ -1,2 +1,5 @@
 * agregar funcion para hacer la lista de paquetes en distribuciones no derivadas de debian
 * agregar funcion para instalar ssh en distribuciones no derivadas de debian
+* agregar: 	http://www.gurudelainformatica.es/2015/10/escaner-de-seguridad-para-debian-y.html
+
+https://github.com/davewood/buck-security/archive/master.zip
