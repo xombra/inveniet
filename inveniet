@@ -13,27 +13,17 @@ quien=$(who | cut -d' ' -f1 | sort | uniq)
 nombre="revision.txt"
 name=$(hostname)
 sshop="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-miproxy="http://user:pass@proxy:8080"
 
 function installssh () {
 	if ! [[ -f /usr/bin/ssh ]]; then
-		export HTTP_PROXY="$miproxy"
-		export HTTPS_PROXY="$miproxy"
-		export FTP_PROXY="$miproxy"
+		if ! [[ -z $3 ]]; then
+			export HTTP_PROXY="$3"
+			export HTTPS_PROXY="$3"
+			export FTP_PROXY="$3"
+		fi
 		apt-get update -q
 		apt-get -y --force-yes ssh
 	fi
-}
-
-function red () {
-	ssh-keygen -b 1024 -t rsa -f /home/$quien/.ssh/id_rsa -N ''
-	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$2" 'cat - >> ~/.ssh/authorized_keys'
-	script -q /dev/stdout -c 'scp $sshop user@"$2":/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
-	script -q /dev/stdout -c 'scp $sshop /tmp/test.bin user@"$2":/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
-	tar -czf /tmp/"$name".tar.gz /tmp/"$name"/
-	md5sum -b /tmp/"$name".tar.gz > /tmp/"$name".tar.gz.md5sum
-	scp "$sshop" /tmp/"$name".tar.gz user@"$2":/home/user/audit/
-	scp "$sshop" /tmp/"$name".tar.gz.md5sum user@"$2":/home/user/audit/
 }
 
 function revision () {
@@ -71,16 +61,6 @@ function revision () {
 	dpkg --get-selections | grep install | awk '{print $1}' >> /tmp/"$name"/"$nombre"
 }
 
-function linenum_1 () {
-	mkdir -p /tmp/"$name"/misc
-	wget -q -O /tmp/"$name"/master.zip - https://github.com/rebootuser/LinEnum/archive/master.zip
-	cd /tmp/"$name"
-	unzip master.zip
-	cd /tmp/"$name"/LinEnum-master
-	./LinEnum.sh -r reportelinenum -e /tmp/"$name"/misc -t
-	copiar reporte al directorio
-}
-
 function lynis_1 () {
 	wget -q -O /tmp/"$name"/lynis.tar.gz - https://cisofy.com/files/lynis-2.1.1.tar.gz
 	cd /tmp/"$name"
@@ -93,18 +73,44 @@ function lynis_1 () {
 	mv -f /var/log/lynis-report.dat /tmp/"$name"/lynis-report.dat
 }
 
+function linenum_1 () {
+	mkdir -p /tmp/"$name"/misc
+	wget -q -O /tmp/"$name"/master.zip - https://github.com/rebootuser/LinEnum/archive/master.zip
+	cd /tmp/"$name"
+	unzip master.zip
+	cd /tmp/"$name"/LinEnum-master
+	./LinEnum.sh -r reportelinenum -e /tmp/"$name"/misc -t
+	cd ..
+	COPIAR REPORTE AL DIRECTORIO
+}
+
+function buck_security () {
+	wget -q -O /tmp/"$name"/buck.zip - https://github.com/davewood/buck-security/archive/master.zip
+	cd /tmp/"$name"
+	unzip buck.zip
+	cd /tmp/"$name"/buck-security-master
+	./buck-security
+	cd ..
+	COPIAR REPORTE AL DIRECTORIO
+}
+
+function red () {
+	ssh-keygen -b 1024 -t rsa -f /home/$quien/.ssh/id_rsa -N ''
+	cat /home/$quien/.ssh/id_rsa.pub | ssh user@"$2" 'cat - >> ~/.ssh/authorized_keys'
+	script -q /dev/stdout -c 'scp $sshop user@"$2":/home/user/test.bin /tmp/' | tee /tmp/"$name"/down.txt
+	script -q /dev/stdout -c 'scp $sshop /tmp/test.bin user@"$2":/home/user/temp/$name.bin' | tee /tmp/"$name"/up.txt
+	tar -czf /tmp/"$name".tar.gz /tmp/"$name"/
+	md5sum -b /tmp/"$name".tar.gz > /tmp/"$name".tar.gz.md5sum
+	scp "$sshop" /tmp/"$name".tar.gz user@"$2":/home/user/audit/
+	scp "$sshop" /tmp/"$name".tar.gz.md5sum user@"$2":/home/user/audit/
+}
+
 function finalizar () {
-	#rm -rf /tmp/"$name"/lynis/*
-	#rm -rf /tmp/"$name"/LinEnum-master/*
-	#rm -rf /tmp/"$name"/misc/*
 	rm -rf /tmp/"$name"/*
 	rmdir /tmp/"$name"/lynis
 	rmdir /tmp/"$name"/misc
 	rmdir /tmp/"$name"/LinEnum-master
-	#rm -f /tmp/"$name".tar.gz
-	#rm -f /tmp/"$name".tar.gz.md5sum
-	#rm -f /tmp/"$name"/lynis.tar.gz
-	#rm -f /tmp/"$name"/master.zip
+	rmdir /tmp/"$name"/buck-security-master
 	rmdir /tmp/"$name"
 	rm -f /tmp/test.bin
 	clear
@@ -112,10 +118,11 @@ function finalizar () {
 
 case "$1" in
 	cliente)
+		installssh
 		revision
 		lynis_1
 		linenum_1
-		installssh
+		buck_security
 		red
 		finalizar
 		;;	
@@ -140,15 +147,17 @@ case "$1" in
 		revision
 		lynis_1
 		linenum_1
-		md5 y limpieza
+		buck_security
+		tar -czf /tmp/"$name".tar.gz /tmp/"$name"/
+		md5sum -b /tmp/"$name".tar.gz > /tmp/"$name".tar.gz.md5sum
+		finalizar
 		;;
 
 	*)
-		echo "uso: $(basename $0) {cliente|servidor|local}"
+		echo "uso: $(basename $0) {cliente|servidor|local} IP PROXY"
 		;;
 
 esac
-
 rm -f inveniet
 rm -f /run/$(basename $0).pid
 trap - INT TERM EXIT
