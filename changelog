@@ -1,4 +1,18 @@
-commit 4eed3452ec1a0aa29b47a39b3e807af472a8133a (HEAD, origin/master, origin/HEAD, master)
+commit 8b65028ece0a2ac391ba07a348cb1a19ac0cc34b (HEAD, origin/master, origin/HEAD, master)
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sun Dec 13 15:44:45 2015 -0430
+
+    * se agrega la funcion para ejecutar buck security
+    * se pasan los valores del proxy como parametro
+    * se hace algo de limpieza
+
+commit 915f5876d2f80c4c8df2aa3170f7df6dbd96900c
+Author: jose perez <sinfallas@gmail.com>
+Date:   Sat Dec 12 23:45:12 2015 -0430
+
+    * changelog
+
+commit 4eed3452ec1a0aa29b47a39b3e807af472a8133a
 Author: jose perez <sinfallas@gmail.com>
 Date:   Sat Dec 12 23:44:44 2015 -0430
 
